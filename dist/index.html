@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calgary Stampede 2026 - Midway Food Map</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+          
+    <style>
+        :root {
+            --primary: #A6192E; /* Stampede Red */
+            --primary-light: #C4263F;
+            --accent: #FFBF00; /* Stampede Gold */
+            --bg-dark: #121212;
+            --bg-card: rgba(28, 28, 28, 0.85);
+            --bg-sidebar: rgba(18, 18, 18, 0.95);
+            --text-main: #FFFFFF;
+            --text-muted: #B3B3B3;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styling */
+        #sidebar {
+            width: 420px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            z-index: 1000;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(166, 25, 46, 0.2) 0%, rgba(18, 18, 18, 0) 100%);
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header h1 span {
+            color: var(--primary);
+        }
+
+        .sidebar-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .gold-divider {
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+            margin-top: 12px;
+            border-radius: 2px;
+        }
+
+        /* Search area */
+        .search-container {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent);
+            background-color: rgba(255,255,255,0.08);
+            box-shadow: 0 0 0 2px rgba(255, 191, 0, 0.2);
+        }
+
+        /* Item List container */
+        .item-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Scrollbar styling */
+        .item-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .item-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .item-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        .item-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Food Card */
+        .food-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .food-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 191, 0, 0.4);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background-color: rgba(38, 38, 38, 0.95);
+        }
+
+        .food-card.active {
+            border-color: var(--accent);
+            background-color: rgba(166, 25, 46, 0.15);
+            box-shadow: 0 0 15px rgba(166, 25, 46, 0.2);
+        }
+
+        .food-card.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--accent);
+        }
+
+        .card-img-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background-color: #2a2a2a;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .food-card:hover .card-img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.3;
+            margin-bottom: 4px;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .card-booth {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .card-vendor {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        /* Map Container */
+        #map-container {
+            flex: 1;
+            height: 100%;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Leaflet Popups Custom Style */
+        .leaflet-popup-content-wrapper {
+            background-color: var(--bg-sidebar) !important;
+            color: white !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border) !important;
+            box-shadow: var(--shadow) !important;
+            backdrop-filter: blur(8px);
+            padding: 0 !important;
+            overflow: hidden;
+        }
+
+        .leaflet-popup-content {
+            margin: 0 !important;
+            width: 280px !important;
+        }
+
+        .leaflet-popup-tip {
+            background-color: var(--bg-sidebar) !important;
+            border: 1px solid var(--border) !important;
+        }
+
+        .popup-header {
+            padding: 12px 16px;
+            background-color: rgba(166, 25, 46, 0.2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .popup-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0;
+            color: white;
+        }
+
+        .popup-header span {
+            font-size: 11px;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .popup-body {
+            padding: 16px;
+        }
+
+        .popup-img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .popup-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Custom SVG Marker Icon */
+        .custom-marker {
+            background: none;
+            border: none;
+        }
+
+        .marker-icon-wrapper {
+            width: 32px;
+            height: 32px;
+            border-radius: 50% 50% 50% 0;
+            background: var(--primary);
+            border: 2px solid white;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .marker-icon-wrapper:hover, .marker-icon-wrapper.active {
+            background: var(--accent);
+            transform: rotate(-45deg) scale(1.15);
+            box-shadow: 0 6px 15px rgba(255, 191, 0, 0.4);
+        }
+
+        .marker-number {
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            transform: rotate(45deg);
+        }
+
+        /* GPS Pulse User Marker */
+        .user-location-marker {
+            background: none;
+            border: none;
+        }
+        
+        .user-dot {
+            width: 14px;
+            height: 14px;
+            background-color: #007AFF; /* Apple Blue */
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 122, 255, 0.6);
+            position: relative;
+        }
+        
+        .user-dot::after {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background-color: rgba(0, 122, 255, 0.3);
+            border-radius: 50%;
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        /* Floating Locate Button */
+        #locate-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 12px 20px;
+            background-color: var(--primary);
+            border: 2px solid white;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        #locate-btn:hover {
+            background-color: var(--accent);
+            color: black;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 191, 0, 0.4);
+        }
+        
+        #locate-btn.active {
+            background-color: #28a745; /* Success Green */
+            color: white;
+        }
+
+        /* Menu Toggle Button styling */
+        #menu-toggle {
+            display: none;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--bg-sidebar);
+            border: 1px solid var(--border);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 2010;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        #menu-toggle:hover {
+            background-color: var(--primary);
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        #menu-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Sidebar Overlay styling */
+        #sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+            z-index: 1999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #sidebar-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Media Queries for Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 320px;
+                max-width: 85%;
+                height: 100%;
+                z-index: 2000;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: none;
+            }
+
+            #sidebar.sidebar-open {
+                transform: translateX(0);
+                box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            }
+
+            #menu-toggle {
+                display: flex;
+            }
+
+            #sidebar-overlay {
+                display: block;
+            }
+
+            #map-container {
+                width: 100%;
+                height: 100%;
+            }
+            
+            /* Leaflet controls custom position adjustment */
+            .leaflet-top.leaflet-left {
+                margin-top: 65px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h1>CS <span>2026</span></h1>
+            <p>Midway Culinary Map</p>
+            <div class="gold-divider"></div>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" id="search" placeholder="Search food items or booths...">
+        </div>
+        
+        <div class="item-list" id="list">
+            <!-- List items dynamically generated -->
+        </div>
+    </div>
+    
+    <!-- Menu Toggle Button (Mobile) -->
+    <button id="menu-toggle" aria-label="Toggle Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay"></div>
+    
+    <!-- Map -->
+    <div id="map-container">
+        <div id="map"></div>
+        <button id="locate-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+            Locate Me
+        </button>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+            
+    <script>
+        // Food items data with local coordinates and images
+        const foodItems = [
+            {
+                "id": 1,
+                "title": "Buldak Stuffed Grilled Cheese",
+                "booth": "Booth #2043",
+                "vendor": "Melt Town Grilled Cheese",
+                "description": "Sweet, spicy, cheesy chaos. This Buldak-stuffed grilled cheese brings the heat with every bite. Loaded with saucy, spice-packed noodles and wrapped in crispy, golden bread. When the heat kicks in, the gooey cheese cools things down-before the spice builds again.",
+                "coords": {"lat": 51.0358827, "lng": -114.0575063},
+                "image": "images/buldak_stuffed_grilled_cheese.png"
+            },
+            {
+                "id": 2,
+                "title": "Blue Coconut Cloud Matcha",
+                "booth": "Booth #FM006",
+                "vendor": "Covet Sips + Sweets",
+                "description": "The viral matcha moment your camera roll needs. This dreamy dessert sip layers earthy matcha beneath a fluffy blue coconut cream cloud for a candy-sweet, creamy treat that's as iconic as it is delicious.",
+                "coords": {"lat": 51.0386616, "lng": -114.0566612},
+                "image": "images/blue_coconut_cloud_matcha.jpg"
+            },
+            {
+                "id": 3,
+                "title": "Amsterdam Cone Fries",
+                "booth": "Booth #2007",
+                "vendor": "The Poutine King",
+                "description": "Go big or go Dutch! A towering 5 lb cone of golden fresh-cut fries, loaded with shredded Gruyère cheese, topped with silky béchamel sauce, and finished with a luxurious truffle mayo drizzle. A towering, shareable showstopper.",
+                "coords": {"lat": 51.036940, "lng": -114.055500},
+                "image": "images/amsterdam_cone_fries.jpg"
+            },
+            {
+                "id": 4,
+                "title": "The Cheesy Saddle Slice",
+                "booth": "Booth #2021",
+                "vendor": "Pizza 73",
+                "description": "A gooey cheese slice dipped in corn dog batter, dusted with Cheetos seasoning and deep-fried to golden perfection. Choose from classic, creamy garlic and pickle, or creamy garlic and pepperoni.",
+                "coords": {"lat": 51.036875, "lng": -114.054700},
+                "image": "images/the_cheesy_saddle_slice.jpg"
+            },
+            {
+                "id": 5,
+                "title": "Deep Fried Street Corn",
+                "booth": "Booth #2049",
+                "vendor": "Drink a Fruit",
+                "description": "Say hello to deep-fried street corn. Slow-roasted at 500 degrees by our specially trained \"corn ninjas,\" husked hot, battered immediately and fried to golden perfection. Take your pick: buttered hot or Mexican-style.",
+                "coords": {"lat": 51.0368470, "lng": -114.0562874},
+                "image": "images/deep_fried_street_corn.png"
+            },
+            {
+                "id": 6,
+                "title": "Dunkaroo Iced Latte",
+                "booth": "Booth #FM006",
+                "vendor": "Covet Sips + Sweets",
+                "description": "The childhood snack that raised us-now in your iced latte era. This creamy, dessert-inspired sip is topped with a Dunkaroo-flavoured soft cloud, bringing sweet frosting and sprinkle nostalgia to the ultimate treat for the iced coffee crowd.",
+                "coords": {"lat": 51.0386616, "lng": -114.0566612},
+                "image": "images/dunkaroo_iced_latte.jpg"
+            },
+            {
+                "id": 7,
+                "title": "Garlic Parm Twisted Pickle",
+                "booth": "Booth #1003",
+                "vendor": "Twisted Pickles",
+                "description": "Move over ordinary snacks, the Garlic Parm Twisted Pickle just rolled onto the midway and its crushing cravings. This twisted pickle gets battered and fried to golden perfection, then bulldozed with creamy garlic aioli and buried under a blizzard of parmesan.",
+                "coords": {"lat": 51.0371391, "lng": -114.0540141},
+                "image": "images/garlic_parm_twisted_pickle.jpg"
+            },
+            {
+                "id": 8,
+                "title": "Maki Sushi Corn Dog",
+                "booth": "Booth #3010",
+                "vendor": "Drink a Fruit",
+                "description": "Who wants to talk about what's big in Japan? The original maki sushi corn dog is no joke. Handmade sushi rice, pressed into seaweed and rolled around a jumbo chicken, beef or veggie dog, coated in panko and fried to golden perfection. Loaded with everything at the sushi table.",
+                "coords": {"lat": 51.034540, "lng": -114.056380},
+                "image": "images/maki_sushi_corn_dog.png"
+            },
+            {
+                "id": 9,
+                "title": "Potato Sago Spiral - With Loaded Tex-Mex",
+                "booth": "Booth #2050",
+                "vendor": "Freakk Fries",
+                "description": "The spiral that sizzles! Get ready to twist your taste buds with our Potato Sago Spirals. Crafted from a perfect blend of creamy mashed potatoes and delicate sago, pressed into golden circles and deep-fried to a flawless snap.",
+                "coords": {"lat": 51.0368480, "lng": -114.056150},
+                "image": "images/potato_sago_spiral_-_with_loaded_tex-mex_edition.jpg"
+            },
+            {
+                "id": 10,
+                "title": "Ramen Donut",
+                "booth": "Booth #2027",
+                "vendor": "Wok This Way",
+                "description": "Nothing says \"yeehaw\" like these 'ramenuts.' This next-level street food fusion features a ramen donut with a deep golden crust of noodles and a cheesy centre-sweet, savoury and crunchy. Topped with our in-house sauces.",
+                "coords": {"lat": 51.0369718, "lng": -114.0554023},
+                "image": "images/ramen_donut.png"
+            }
+        ];
+
+        // Initialize Map
+        // Center of Stampede Park is approx 51.0368, -114.0550
+        const map = L.map('map', {
+            center: [51.0368, -114.0550],
+            zoom: 17,
+            minZoom: 15,
+            maxZoom: 19,
+            zoomControl: false
+        });
+
+        L.control.zoom({ position: 'topright' }).addTo(map);
+
+        // Map styles
+        const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        });
+
+        const darkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd'
+        });
+
+        // Set default tile layer
+        satellite.addTo(map);
+
+        // Layer Control
+        const baseLayers = {
+            "Satellite View (Hybrid)": satellite,
+            "Sleek Dark Theme": darkMatter
+        };
+        L.control.layers(baseLayers, null, { position: 'topright' }).addTo(map);
+
+        const markers = {};
+        let activeCardId = null;
+
+        // Render List and Markers
+        function renderItems(itemsToRender) {
+            const listContainer = document.getElementById('list');
+            listContainer.innerHTML = '';
+
+            // Clear existing markers from map
+            for (let id in markers) {
+                map.removeLayer(markers[id]);
+            }
+
+            itemsToRender.forEach((item) => {
+                // 1. Create card
+                const card = document.createElement('div');
+                card.className = `food-card ${activeCardId === item.id ? 'active' : ''}`;
+                card.setAttribute('data-id', item.id);
+                card.innerHTML = `
+                    <div class="card-img-container">
+                        <img class="card-img" src="${item.image}" alt="${item.title}">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-booth">${item.booth}</span>
+                        <h3 class="card-title">${item.title}</h3>
+                        <p class="card-vendor">${item.vendor}</p>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => {
+                    selectItem(item.id, true);
+                });
+
+                listContainer.appendChild(card);
+
+                // 2. Create Custom Marker
+                const customIcon = L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div class="marker-icon-wrapper" id="marker-wrapper-${item.id}">
+                             <span class="marker-number">${item.id}</span>
+                           </div>`,
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32]
+                });
+
+                const popupHTML = `
+                    <div class="popup-header">
+                        <span>${item.booth} &bull; ${item.vendor}</span>
+                        <h3>${item.title}</h3>
+                    </div>
+                    <div class="popup-body">
+                        <img class="popup-img" src="${item.image}" alt="${item.title}">
+                        <p class="popup-desc">${item.description}</p>
+                    </div>
+                `;
+
+                const marker = L.marker([item.coords.lat, item.coords.lng], { icon: customIcon })
+                    .bindPopup(popupHTML)
+                    .addTo(map);
+
+                marker.on('click', () => {
+                    selectItem(item.id, false);
+                });
+
+                markers[item.id] = marker;
+            });
+        }
+
+        // Handle item selection
+        function selectItem(id, zoomTo) {
+            // Update active state in UI
+            if (activeCardId) {
+                const prevActive = document.querySelector(`.food-card[data-id="${activeCardId}"]`);
+                if (prevActive) prevActive.classList.remove('active');
+                
+                const prevMarker = document.getElementById(`marker-wrapper-${activeCardId}`);
+                if (prevMarker) prevMarker.classList.remove('active');
+            }
+
+            activeCardId = id;
+            
+            const newActive = document.querySelector(`.food-card[data-id="${id}"]`);
+            if (newActive) {
+                newActive.classList.add('active');
+                // Scroll card into view inside sidebar
+                newActive.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            const newMarker = document.getElementById(`marker-wrapper-${id}`);
+            if (newMarker) newMarker.classList.add('active');
+
+            const item = foodItems.find(f => f.id === id);
+            
+            if (zoomTo && item) {
+                map.setView([item.coords.lat, item.coords.lng], 18, { animate: true });
+                markers[id].openPopup();
+            }
+
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('sidebar-open');
+                document.getElementById('sidebar-overlay').classList.remove('active');
+            }
+        }
+
+        // Search logic
+        const searchInput = document.getElementById('search');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = foodItems.filter(item => 
+                item.title.toLowerCase().includes(query) ||
+                item.vendor.toLowerCase().includes(query) ||
+                item.booth.toLowerCase().includes(query) ||
+                item.description.toLowerCase().includes(query)
+            );
+            renderItems(filtered);
+        });
+
+        // Initialize Render
+        renderItems(foodItems);
+
+        // Geolocation / GPS Live Tracking System
+        let userMarker = null;
+        let userAccuracyCircle = null;
+        let watchId = null;
+        let isFollowingUser = false;
+
+        const locateBtn = document.getElementById('locate-btn');
+
+        locateBtn.addEventListener('click', () => {
+            if (watchId !== null) {
+                // Stop tracking
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+                isFollowingUser = false;
+                locateBtn.classList.remove('active');
+                locateBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                    Locate Me
+                `;
+                if (userMarker) map.removeLayer(userMarker);
+                if (userAccuracyCircle) map.removeLayer(userAccuracyCircle);
+                userMarker = null;
+                userAccuracyCircle = null;
+                showToast("GPS Tracking disabled.");
+            } else {
+                // Start tracking
+                if (!navigator.geolocation) {
+                    alert("Geolocation is not supported by your browser.");
+                    return;
+                }
+                
+                locateBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    Tracking...
+                `;
+                
+                watchId = navigator.geolocation.watchPosition(onLocationSuccess, onLocationError, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                });
+            }
+        });
+
+        function onLocationSuccess(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+            
+            const userCoords = L.latLng(lat, lng);
+            const stampedeCenter = L.latLng(51.0368, -114.0550);
+            
+            const distanceMeters = userCoords.distanceTo(stampedeCenter);
+            const distanceKm = (distanceMeters / 1000).toFixed(2);
+            
+            locateBtn.classList.add('active');
+            locateBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                Tracking On
+            `;
+            
+            const userIcon = L.divIcon({
+                className: 'user-location-marker',
+                html: `<div class="user-dot"></div>`,
+                iconSize: [14, 14],
+                iconAnchor: [7, 7]
+            });
+            
+            if (userMarker) {
+                userMarker.setLatLng(userCoords);
+                userAccuracyCircle.setLatLng(userCoords).setRadius(accuracy);
+            } else {
+                userMarker = L.marker(userCoords, { icon: userIcon }).addTo(map)
+                    .bindPopup("<b>Your Location</b><br>Accuracy: " + accuracy.toFixed(0) + "m");
+                userAccuracyCircle = L.circle(userCoords, {
+                    radius: accuracy,
+                    color: '#007AFF',
+                    fillColor: '#007AFF',
+                    fillOpacity: 0.1,
+                    weight: 1
+                }).addTo(map);
+                
+                if (distanceKm > 5.0) {
+                    showToast(`You are ${distanceKm} km away from Stampede Park! Auto-follow disabled to keep Midway visible.`);
+                    const bounds = L.latLngBounds([userCoords, stampedeCenter]);
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                } else {
+                    showToast(`GPS Connected! You are ${distanceKm} km from the Midway foods.`);
+                    map.setView(userCoords, 18, { animate: true });
+                    isFollowingUser = true;
+                }
+            }
+            
+            if (isFollowingUser && distanceKm <= 5.0) {
+                map.setView(userCoords, map.getZoom(), { animate: true });
+            }
+        }
+
+        function onLocationError(error) {
+            console.error("GPS Error: ", error);
+            showToast("GPS Error: " + error.message);
+            locateBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                Locate Me
+            `;
+            locateBtn.classList.remove('active');
+            watchId = null;
+        }
+
+        // Custom Toast Notification System
+        function showToast(message) {
+            let toast = document.getElementById('toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toast';
+                toast.style.position = 'absolute';
+                toast.style.bottom = '80px';
+                toast.style.left = '50%';
+                toast.style.transform = 'translateX(-50%)';
+                toast.style.backgroundColor = 'rgba(18, 18, 18, 0.9)';
+                toast.style.color = 'white';
+                toast.style.padding = '12px 24px';
+                toast.style.borderRadius = '30px';
+                toast.style.fontSize = '13px';
+                toast.style.fontWeight = '600';
+                toast.style.boxShadow = '0 8px 32px rgba(0,0,0,0.5)';
+                toast.style.border = '1px solid rgba(255,255,255,0.1)';
+                toast.style.zIndex = '2000';
+                toast.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                toast.style.textAlign = 'center';
+                toast.style.maxWidth = '90%';
+                document.body.appendChild(toast);
+            }
+            toast.innerText = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(10px)';
+            }, 5000);
+        }
+
+        // Collapsible Sidebar Toggle Logic
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        if (menuToggle && sidebar && sidebarOverlay) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('sidebar-open');
+                sidebarOverlay.classList.toggle('active');
+            });
+
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('sidebar-open');
+                sidebarOverlay.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+</html>

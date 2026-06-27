@@ -1,0 +1,237 @@
+[
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/danny.html",
+    "line": 41,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/danny.html",
+    "line": 48,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/danny.html",
+    "line": 55,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/danny.html",
+    "line": 63,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "single-font",
+    "name": "Single font for everything",
+    "description": "Only one font family is used for the entire page. Pair a distinctive display font with a refined body font to create typographic hierarchy.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/danny.html",
+    "line": 30,
+    "snippet": "only font used is montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/helen.html",
+    "line": 38,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/helen.html",
+    "line": 45,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/helen.html",
+    "line": 52,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/helen.html",
+    "line": 60,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "single-font",
+    "name": "Single font for everything",
+    "description": "Only one font family is used for the entire page. Pair a distinctive display font with a refined body font to create typographic hierarchy.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/helen.html",
+    "line": 28,
+    "snippet": "only font used is montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/index.html",
+    "line": 45,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/index.html",
+    "line": 52,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/index.html",
+    "line": 59,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/index.html",
+    "line": 67,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "design-system-color",
+    "name": "Color outside DESIGN.md",
+    "description": "A literal color is outside the DESIGN.md palette and sidecar tonal ramps. This may be legitimate, but it should be an intentional design-system addition rather than drift.",
+    "severity": "advisory",
+    "file": "/home/dataham/tamtham.com/index.html",
+    "line": 162,
+    "snippet": "Undocumented color rgba(0,0,0,0.3) is outside DESIGN.md colors",
+    "ignoreValue": "rgba(0,0,0,0.3)"
+  },
+  {
+    "antipattern": "single-font",
+    "name": "Single font for everything",
+    "description": "Only one font family is used for the entire page. Pair a distinctive display font with a refined body font to create typographic hierarchy.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/index.html",
+    "line": 30,
+    "snippet": "only font used is montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-danny.html",
+    "line": 25,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-danny.html",
+    "line": 32,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-danny.html",
+    "line": 39,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-danny.html",
+    "line": 47,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "single-font",
+    "name": "Single font for everything",
+    "description": "Only one font family is used for the entire page. Pair a distinctive display font with a refined body font to create typographic hierarchy.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-danny.html",
+    "line": 17,
+    "snippet": "only font used is montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-helen.html",
+    "line": 24,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-helen.html",
+    "line": 31,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-helen.html",
+    "line": 38,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "overused-font",
+    "name": "Overused font",
+    "description": "Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-helen.html",
+    "line": 46,
+    "snippet": "font-family: 'Montserrat"
+  },
+  {
+    "antipattern": "single-font",
+    "name": "Single font for everything",
+    "description": "Only one font family is used for the entire page. Pair a distinctive display font with a refined body font to create typographic hierarchy.",
+    "severity": "warning",
+    "file": "/home/dataham/tamtham.com/verify-helen.html",
+    "line": 17,
+    "snippet": "only font used is montserrat"
+  }
+]

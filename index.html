@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="The Tam-Thams of Calgary — Danny Tam-Tham (IT strategy & digital transformation) and Helen Tam-Tham (physician & clinical research). Choose who you're here to see.">
+
+  <!-- Favicons -->
+  <link rel="icon" href="/assets/images/favicons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/assets/images/favicons/apple-touch-icon.png">
+
+  <!-- OpenGraph Meta Tags -->
+  <meta property="og:title" content="Tam-Tham | Consulting & Research">
+  <meta property="og:description"
+    content="Danny Tam-Tham — IT strategy & digital transformation. Helen Tam-Tham — clinical research. Choose who you're here to see.">
+  <meta property="og:image" content="https://tamtham.com/assets/images/optimized/HDMain-1920.webp">
+  <meta property="og:url" content="https://tamtham.com/">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tam-Tham | Consulting & Research">
+  <meta name="twitter:description"
+    content="Danny Tam-Tham — IT strategy & digital transformation. Helen Tam-Tham — clinical research. Choose who you're here to see.">
+  <meta name="twitter:image" content="https://tamtham.com/assets/images/optimized/HDMain-1920.webp">
+
+  <!-- Title -->
+  <title>Tam-Tham | Consulting & Research</title>
+
+  <!-- Self-hosted Montserrat WOFF2 Preload -->
+  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" as="image" media="(min-width: 768px)"
+    imagesrcset="/assets/images/optimized/DHFamily-768.webp 768w, /assets/images/optimized/DHFamily-1280.webp 1280w, /assets/images/optimized/DHFamily-1536.webp 1536w"
+    imagesizes="100vw">
+  <link rel="preload" as="image" media="(max-width: 767px)"
+    imagesrcset="/assets/images/optimized/HeroTall-375.webp 375w, /assets/images/optimized/HeroTall-768.webp 768w"
+    imagesizes="100vw">
+  <link rel="preload" as="image" href="/assets/images/optimized/HelenPortrait-768.webp" type="image/webp">
+  <link rel="preload" as="image" href="/assets/images/optimized/DannyPortrait-768.webp" type="image/webp">
+
+  <!-- Compiled Tailwind CSS (brand theme baked in) -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- Montserrat Font Face -->
+  <style>
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('/assets/fonts/Montserrat/Montserrat-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('/assets/fonts/Montserrat/Montserrat-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('/assets/fonts/Montserrat/Montserrat-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+  </style>
+
+  <!-- Router-specific styles -->
+  <style>
+    :root {
+      --navy: #103248;
+      --navy-lift: #16455f;
+      /* hovered panel */
+      --yellow: #F0D04C;
+      --teal: #7DC2B6;
+      --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      min-height: 100svh;
+    }
+
+    /* Hero: the couple, warmly — navy-scrimmed so it stays on brand */
+    .hero {
+      position: relative;
+      min-height: 46vh;
+      overflow: hidden;
+      background-color: var(--navy);
+    }
+
+    .hero-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 36%;
+    }
+
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        /* a whisper of handshake-warmth on the couple */
+        radial-gradient(70% 52% at 50% 34%,
+          rgba(240, 208, 76, 0.07) 0%,
+          rgba(240, 208, 76, 0) 60%),
+        /* keep faces luminous; vignette the edges for focus */
+        radial-gradient(125% 92% at 50% 33%,
+          rgba(16, 50, 72, 0) 0%,
+          rgba(16, 50, 72, 0) 40%,
+          rgba(16, 50, 72, 0.26) 78%,
+          rgba(16, 50, 72, 0.48) 100%),
+        /* vertical: lift the murky top, luminous mid, dark base for text */
+        linear-gradient(180deg,
+          rgba(16, 50, 72, 0.34) 0%,
+          rgba(16, 50, 72, 0.10) 24%,
+          rgba(16, 50, 72, 0.20) 52%,
+          rgba(16, 50, 72, 0.80) 84%,
+          #103248 100%);
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        min-height: 56vh;
+      }
+
+      .hero-photo {
+        object-position: 50% 30%;
+      }
+    }
+
+    /* The diptych: two person-zones */
+    .zone {
+      position: relative;
+      background-color: var(--navy);
+      transition: background-color 0.35s ease;
+    }
+
+    @media (min-width: 768px) {
+
+      .zone:hover,
+      .zone:focus-visible {
+        background-color: var(--navy-lift);
+      }
+
+      /* Dim the sibling so the chosen path leads */
+      .router:hover .zone:not(:hover) {
+        background-color: var(--navy);
+      }
+
+      .router:hover .zone:not(:hover) .zone-inner {
+        opacity: 0.62;
+      }
+    }
+
+    .zone:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: -3px;
+    }
+
+    .zone-inner {
+      transition: opacity 0.35s ease;
+    }
+
+    .portrait {
+      width: clamp(132px, 22vw, 196px);
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      object-fit: cover;
+      background-color: var(--navy);
+      /* placeholder; no broken-image flash, no CLS */
+      box-shadow: 0 10px 25px -5px #1032484d;
+      outline: 2px solid rgba(255, 255, 255, 0.12);
+      outline-offset: 4px;
+      transition: transform 0.45s var(--ease-out-quint),
+        outline-color 0.35s ease;
+    }
+
+    @media (min-width: 768px) {
+
+      .zone:hover .portrait,
+      .zone:focus-visible .portrait {
+        transform: scale(1.045);
+        outline-color: var(--teal);
+      }
+    }
+
+    .meet-cue {
+      color: var(--yellow);
+      transition: color 0.3s ease;
+    }
+
+    .meet-cue .arrow {
+      display: inline-block;
+      transition: transform 0.4s var(--ease-out-quint);
+    }
+
+    @media (min-width: 768px) {
+
+      .zone:hover .meet-cue .arrow,
+      .zone:focus-visible .meet-cue .arrow {
+        transform: translateX(7px);
+      }
+    }
+
+    /* Entrance: a quiet, staggered introduction. Default state is visible;
+       the reveal only enhances when motion is welcome. */
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: rise 0.7s var(--ease-out-quint) both;
+      }
+
+      .reveal-1 {
+        animation-delay: 0.05s;
+      }
+
+      .reveal-2 {
+        animation-delay: 0.16s;
+      }
+
+      .reveal-3 {
+        animation-delay: 0.27s;
+      }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="font-montserrat bg-primary-navy text-white app-shell flex flex-col">
+
+  <!-- Skip to main content (Accessibility) -->
+  <a href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-primary-yellow focus:text-primary-navy focus:px-4 focus:py-2 focus:rounded-lg focus:font-semibold focus:z-50">
+    Skip to main content
+  </a>
+
+  <!-- Hero: the Tam-Thams, together -->
+  <section class="hero flex flex-col">
+    <picture>
+      <!-- Desktop/tablet: the full standing portrait, framed via object-position.
+           The wide/short hero band needs the taller source so both faces balance
+           (Danny stands higher than Helen; a short crop would favour him). -->
+      <source media="(min-width: 768px)" srcset="/assets/images/optimized/DHFamily-768.webp 768w,
+                      /assets/images/optimized/DHFamily-1280.webp 1280w,
+                      /assets/images/optimized/DHFamily-1536.webp 1536w" sizes="100vw">
+      <!-- Mobile: tighter portrait crop of the couple -->
+      <img src="/assets/images/optimized/HeroTall-768.webp" srcset="/assets/images/optimized/HeroTall-375.webp 375w,
+                   /assets/images/optimized/HeroTall-768.webp 768w" sizes="100vw"
+        alt="Helen and Danny Tam-Tham standing together" class="hero-photo" width="1100" height="1240" loading="eager"
+        decoding="async" fetchpriority="high">
+    </picture>
+    <div class="hero-scrim" aria-hidden="true"></div>
+
+    <a href="/"
+      class="relative z-10 self-start m-5 md:m-6 text-primary-yellow font-bold tracking-tight text-xl md:text-2xl drop-shadow-md"
+      aria-label="Tam-Tham home">Tam-Tham</a>
+
+    <div class="reveal reveal-1 relative z-10 mt-auto text-center px-6 pb-7 pt-20"
+      style="text-shadow: 0 1px 18px rgba(13, 36, 52, 0.55);">
+      <h1 class="font-bold text-white"
+        style="font-size: clamp(2rem, 4.6vw, 3rem); letter-spacing: -0.02em; text-wrap: balance;">Good to meet you.</h1>
+      <p class="mt-2 text-base md:text-lg text-secondary-teal">Tap whoever you're here to see.</p>
+    </div>
+  </section>
+
+  <!-- Main: the two-person routing diptych (Helen left, Danny right) -->
+  <main id="main-content" class="router flex-1 flex flex-col md:flex-row">
+
+    <!-- Helen -->
+    <a href="/helen.html" class="zone flex-1 flex items-center justify-center px-6 py-12 focus:outline-none"
+      aria-label="Meet Helen Tam-Tham, Research Consultant at Tam-Tham Research">
+      <span class="zone-inner reveal reveal-2 flex flex-col items-center text-center max-w-sm">
+        <img src="/assets/images/optimized/HelenPortrait-768.webp" srcset="/assets/images/optimized/HelenPortrait-375.webp 375w,
+                     /assets/images/optimized/HelenPortrait-768.webp 768w" sizes="196px" alt="" class="portrait"
+          width="768" height="768" loading="eager" decoding="async">
+        <h2 class="mt-7 text-2xl md:text-3xl font-bold text-white">Helen Tam-Tham</h2>
+        <span class="mt-2 block text-sm md:text-base font-semibold text-secondary-teal">Research
+          Consultant&nbsp;·&nbsp;Tam-Tham Research</span>
+        <span class="mt-3 block text-sm text-white/75 leading-relaxed">Clinical research, publications &amp; data
+          analysis</span>
+        <span class="meet-cue mt-6 inline-flex items-center gap-1.5 text-base font-semibold">
+          Meet Helen <span class="arrow" aria-hidden="true">&rarr;</span>
+        </span>
+      </span>
+    </a>
+
+    <!-- Danny -->
+    <a href="/danny.html"
+      class="zone flex-1 flex items-center justify-center px-6 py-12 border-t border-white/10 md:border-t-0 md:border-l focus:outline-none"
+      aria-label="Meet Danny Tam-Tham, Principal Consultant at Tam-Tham Consulting">
+      <span class="zone-inner reveal reveal-3 flex flex-col items-center text-center max-w-sm">
+        <img src="/assets/images/optimized/DannyPortrait-768.webp" srcset="/assets/images/optimized/DannyPortrait-375.webp 375w,
+                     /assets/images/optimized/DannyPortrait-768.webp 768w" sizes="196px" alt="" class="portrait"
+          width="768" height="768" loading="lazy" decoding="async">
+        <h2 class="mt-7 text-2xl md:text-3xl font-bold text-white">Danny Tam-Tham</h2>
+        <span class="mt-2 block text-sm md:text-base font-semibold text-secondary-teal">Principal
+          Consultant&nbsp;·&nbsp;Tam-Tham Consulting</span>
+        <span class="mt-3 block text-sm text-white/75 leading-relaxed">IT strategy, digital transformation &amp;
+          advisory</span>
+        <span class="meet-cue mt-6 inline-flex items-center gap-1.5 text-base font-semibold">
+          Meet Danny <span class="arrow" aria-hidden="true">&rarr;</span>
+        </span>
+      </span>
+    </a>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="px-6 py-4 text-center border-t border-white/10">
+    <p class="text-xs text-white/60">© 2026 Tam-Tham · Calgary, AB</p>
+  </footer>
+
+</body>
+
+</html>

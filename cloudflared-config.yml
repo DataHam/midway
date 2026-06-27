@@ -1,0 +1,11 @@
+tunnel: combined-tunnel
+credentials-file: C:\Users\DannyTam-Tham\.cloudflared\cert\combined-tunnel.json
+
+ingress:
+  - hostname: danny.tamtham.com
+    service: http://localhost:8080
+    path: /
+  - hostname: helen.tamtham.com
+    service: http://localhost:8080
+    path: /
+  - service: http_status:404

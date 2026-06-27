@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+static/css/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Coverage
+coverage/
+
+# Temp
+*.tmp
+*.temp
+
+# Playwright
+test-results/
+.playwright/
+*.png
+*.jpg
+*.jpeg
+# Keep committed site favicons / app icons (referenced by every page; must deploy)
+!assets/images/favicons/
+!assets/images/favicons/*.png
+dist/
+Downloads/
+.claude/

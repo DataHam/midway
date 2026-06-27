@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turnstile Demo - tamtham.com</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
+    .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; }
+    h1 { margin-bottom: 10px; }
+    .subtitle { color: #535A60; margin-bottom: 20px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    button { width: 100%; padding: 12px; background: #103248; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    button:disabled { background: #ccc; }
+    .message { margin-top: 15px; padding: 10px; border-radius: 8px; display: none; }
+    .success { background: #7DC2B6; color: white; }
+    .error { background: #D64E34; color: white; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Turnstile Verification</h1>
+    <p class="subtitle">Demo page for Cloudflare Turnstile on tamtham.com</p>
+
+    <form id="verificationForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+      </div>
+
+      <div class="cf-turnstile" id="turnstile-container"></div>
+
+      <button type="submit" id="submitBtn" disabled>
+        Submit
+      </button>
+
+      <div id="message" class="message"></div>
+    </form>
+
+    <p class="status">Powered by Cloudflare Turnstile</p>
+  </div>
+
+  <script>
+    const SITEKEY = '0x4AAAAAACqPb7_1_GXNUJCz';
+    const VERIFY_URL = '/api/turnstile/verify';
+
+    let turnstileLoaded = false;
+    let widgetId = null;
+
+    // Load Turnstile script
+    function loadTurnstile() {
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.async = true;
+      script.defer = true;
+      
+      script.onload = () => {
+        renderWidget();
+      };
+      
+      document.head.appendChild(script);
+    }
+
+    // Render Turnstile widget
+    function renderWidget() {
+      if (!window.turnstile) return;
+
+      widgetId = window.turnstile.render('#turnstile-container', {
+        sitekey: SITEKEY,
+        callback: (token) => {
+          console.log('Turnstile verified:', token);
+          document.getElementById('submitBtn').disabled = false;
+          showStatus('✓ Verified', 'success');
+        },
+        'expired-callback': () => {
+          document.getElementById('submitBtn').disabled = true;
+          showStatus('Verification expired', 'error');
+        },
+        'error-callback': (error) => {
+          console.error('Turnstile error:', error);
+          showStatus('Verification error: ' + error, 'error');
+        }
+      });
+    }
+
+    // Show status message
+    function showStatus(message, type) {
+      const msgEl = document.getElementById('message');
+      msgEl.textContent = message;
+      msgEl.className = 'message ' + type;
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          msgEl.className = 'message';
+        }, 3000);
+      }
+    }
+
+    // Form submission
+    document.getElementById('verificationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Verifying...';
+
+      try {
+        const response = await fetch(VERIFY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: window.turnstile.getResponse(widgetId) })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          showStatus('✓ Verification successful!', 'success');
+          // Here you would redirect or proceed with your logic
+          // window.location.href = '/dashboard';
+        } else {
+          showStatus('✗ ' + (data.error || 'Verification failed'), 'error');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit';
+        }
+      } catch (error) {
+        showStatus('✗ Network error', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+      }
+    });
+
+    // Initialize
+    loadTurnstile();
+  </script>
+</body>
+</html>

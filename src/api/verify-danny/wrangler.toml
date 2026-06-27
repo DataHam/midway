@@ -1,0 +1,6 @@
+name = "tamtham-verify-danny"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+TURNSTILE_SECRET_KEY = "0x4AAAAAACqPbwbqvbsLcoD6EqEfeyhzrME"

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Access — Helen Tam-Tham</title>
+  
+  <!-- Favicons -->
+  <link rel="icon" href="/assets/images/favicons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/assets/images/favicons/apple-touch-icon.png">
+  
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  
+  <!-- Self-hosted Montserrat Fonts -->
+  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <style>
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('/assets/fonts/Montserrat/Montserrat-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('/assets/fonts/Montserrat/Montserrat-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('/assets/fonts/Montserrat/Montserrat-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #103248 0%, #385C8F 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      margin: 0;
+    }
+    
+    .gate-container {
+      background: white;
+      padding: 3rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px #10324833;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .gate-container h1 {
+      color: #103248;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .gate-container p {
+      color: #535A60;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .gate-note {
+      font-size: 0.875rem;
+      color: #535A60;
+      margin-top: 1.5rem;
+    }
+    
+    /* Modal Styles */
+    .error-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #10324880;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .error-modal-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .error-modal {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px #1032484d;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    
+    .error-modal-overlay.visible .error-modal {
+      transform: scale(1);
+    }
+    
+    .error-icon {
+      width: 48px;
+      height: 48px;
+      background: #D64E34;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    
+    .error-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+    
+    .error-title {
+      color: #103248;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .error-message {
+      color: #535A60;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+    }
+    
+    .error-code {
+      color: #7DC2B6;
+      font-size: 0.875rem;
+      font-family: monospace;
+      margin-bottom: 1.5rem;
+    }
+    
+    .error-button {
+      background: #103248;
+      color: white;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    
+    .error-button:hover {
+      background: #385C8F;
+    }
+    
+    /* Modal Styles - Updated */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #10324880;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    
+    .modal-content h2 {
+      color: #D64E34;
+      margin-bottom: 1rem;
+    }
+    
+    .modal-content p {
+      color: #535A60;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-content button {
+      background: #103248;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    /* Submit Button */
+    .submit-button {
+      background: #103248;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, opacity 0.2s ease;
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+    
+    .submit-button:hover:not(:disabled) {
+      background: #385C8F;
+    }
+    
+    .submit-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="gate-container">
+    <h1>Verify Access</h1>
+    <p>Please complete the security check to proceed to Helen Tam-Tham's contact page.</p>
+    
+    <!-- Build-time sitekey injection -->
+    <script>
+      window.TAMTHAM_SITEKEY = "0x4AAAAAACqPb7_1_GXNUJCz";
+    </script>
+    
+    <!-- Cloudflare Turnstile Widget Container -->
+    <div id="turnstile-widget" class="cf-turnstile"></div>
+    
+    <!-- Submit Button -->
+    <button id="submit-btn" class="submit-button" onclick="submitVerification()">Verify and Continue</button>
+    
+    <p class="gate-note">This verification helps protect against automated bots.</p>
+  </div>
+  
+ <!-- Error Modal -->
+   <div id="error-modal" class="modal" style="display: none;">
+     <div class="modal-content">
+       <h2 id="error-title">Verification Failed</h2>
+       <p id="error-message">The verification code was incorrect. Please try again.</p>
+       <button onclick="closeModal()">Close</button>
+     </div>
+   </div>
+  
+  <script>
+    // Build-time sitekey injection
+    window.TAMTHAM_SITEKEY = "0x4AAAAAACqPb7_1_GXNUJCz";
+    
+    // Error message mapping (per locked decisions)
+    const ERROR_MESSAGES = {
+      INVALID_CODE: "The verification code was incorrect. Please try again.",
+      EXPIRED_TOKEN: "The verification code has expired. Please start over.",
+      RATE_LIMITED: "Too many failed attempts. Please wait before trying again.",
+      SERVICE_UNAVAILABLE: "The security service is temporarily unavailable. Please try again later."
+    };
+    
+    // Initialize Turnstile widget on DOM load
+    document.addEventListener('DOMContentLoaded', function() {
+      const sitekey = window.TAMTHAM_SITEKEY;
+      
+      if (!sitekey || sitekey === '0x4AAAAAACqPb7_1_GXNUJCz') {
+        console.error('Sitekey not configured');
+        showErrorModal('CONFIG_ERROR', 'Configuration error. Please contact support.');
+        return;
+      }
+      
+      // Render Turnstile widget
+      if (typeof turnstile !== 'undefined') {
+        turnstile.render('#turnstile-widget', {
+          sitekey: sitekey,
+          callback: function(token) {
+            console.log('Token received, submitting verification...');
+            // Disable submit button immediately
+            document.getElementById('submit-btn').disabled = true;
+            submitVerification(token);
+          },
+          'error-callback': function(errorCode) {
+            console.error('Turnstile error:', errorCode);
+            showErrorModal('TURNSTILE_ERROR', 'Security check failed. Please try again.');
+          },
+          'expired-callback': function() {
+            console.log('Token expired, resetting widget...');
+            if (typeof turnstile !== 'undefined') {
+              turnstile.reset('turnstile-widget');
+            }
+          },
+          'timeout-callback': function() {
+            console.log('Challenge timed out');
+            showErrorModal('TIMEOUT_ERROR', 'Security check timed out. Please try again.');
+          }
+        });
+      } else {
+        console.error('Turnstile library not loaded');
+        showErrorModal('SERVICE_UNAVAILABLE', 'Security service is not available.');
+      }
+    });
+    
+    // Submit verification function
+    async function submitVerification(token) {
+      const submitBtn = document.getElementById('submit-btn');
+      if (submitBtn) submitBtn.disabled = true;
+
+      try {
+        // If no token provided, try to get it from Turnstile
+        if (!token && typeof turnstile !== 'undefined') {
+          token = turnstile.getResponse();
+        }
+
+        if (!token) {
+          if (submitBtn) submitBtn.disabled = false;
+          showErrorModal('INVALID_CODE', 'Please complete the security check first.');
+          return;
+        }
+        
+        console.log('Submitting token to API...');
+        const response = await fetch('/api/verify-helen', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ token })
+        });
+        
+        // Handle 302 redirect if fetch followed it
+        if (response.redirected) {
+          console.log('Redirected to:', response.url);
+          window.location.href = response.url;
+          return;
+        }
+        
+        const data = await response.json();
+        
+        if (data.success && data.redirectUrl) {
+          console.log('Verification successful, redirecting to:', data.redirectUrl);
+          window.location.href = data.redirectUrl;
+        } else if (data.redirectUrl) {
+          // Fallback if success flag is missing but redirectUrl is present
+          window.location.href = data.redirectUrl;
+        } else {
+          console.error('Verification failed:', data.error);
+          showErrorModal(data.error || 'UNKNOWN_ERROR', data.message || 'An error occurred during verification.');
+          if (submitBtn) submitBtn.disabled = false;
+          if (typeof turnstile !== 'undefined') {
+            turnstile.reset();
+          }
+        }
+      } catch (error) {
+        console.error('Network error:', error);
+        showErrorModal('SERVICE_UNAVAILABLE', 'The security service is temporarily unavailable. Please try again later.');
+        if (submitBtn) submitBtn.disabled = false;
+        if (typeof turnstile !== 'undefined') {
+          turnstile.reset();
+        }
+      }
+    }
+    
+    // Show error modal function
+    function showErrorModal(errorCode, message) {
+      const modal = document.getElementById('error-modal');
+      const errorTitle = document.getElementById('error-title');
+      const errorMessage = document.getElementById('error-message');
+      
+      console.log('Showing error modal:', errorCode, message);
+      
+      // Set error title based on error code
+      const titles = {
+        'INVALID_CODE': 'Verification Failed',
+        'EXPIRED_TOKEN': 'Token Expired',
+        'RATE_LIMITED': 'Too Many Attempts',
+        'SERVICE_UNAVAILABLE': 'Service Unavailable',
+        'CONFIG_ERROR': 'Configuration Error',
+        'TURNSTILE_ERROR': 'Security Check Failed',
+        'TIMEOUT_ERROR': 'Timeout Error'
+      };
+      
+      errorTitle.textContent = titles[errorCode] || 'Error';
+      errorMessage.textContent = message || ERROR_MESSAGES[errorCode] || 'An error occurred during verification.';
+      
+      // Show modal
+      modal.style.display = 'flex';
+    }
+    
+    // Close modal function
+    function closeModal() {
+      const modal = document.getElementById('error-modal');
+      modal.style.display = 'none';
+    }
+  </script>
+  
+</body>
+</html>

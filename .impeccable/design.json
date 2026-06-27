@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-25T00:00:00.000Z",
+  "title": "Design System: Tam-Tham",
+  "extensions": {
+    "colorMeta": {
+      "harbour-navy": { "role": "primary", "displayName": "Deep Harbour Navy", "canonical": "#103248", "tonalRamp": ["#08151E", "#0B202E", "#103248", "#1A4A66", "#2C6489", "#4E86AB", "#7FB0CC", "#BBD6E6"] },
+      "handshake-yellow": { "role": "primary", "displayName": "Handshake Yellow", "canonical": "#F0D04C", "tonalRamp": ["#3D3204", "#6B5A11", "#998021", "#C7A833", "#F0D04C", "#F4DA72", "#F8E69E", "#FCF2CC"] },
+      "coastal-teal": { "role": "secondary", "displayName": "Coastal Teal", "canonical": "#7DC2B6", "tonalRamp": ["#1C342F", "#2C4F47", "#3E6F64", "#549183", "#7DC2B6", "#9BD2C8", "#BCE2DB", "#DEF1EE"] },
+      "slate-blue": { "role": "secondary", "displayName": "Slate Blue", "canonical": "#385C8F", "tonalRamp": ["#15243A", "#1F3553", "#2A476F", "#385C8F", "#4F76AE", "#7494C3", "#9FB5D6", "#CCD8EB"] },
+      "signal-coral": { "role": "tertiary", "displayName": "Signal Coral", "canonical": "#D64E34", "tonalRamp": ["#3A140C", "#5E2113", "#852F1B", "#AD3D24", "#D64E34", "#E0735F", "#EA9A8C", "#F4C2BA"] },
+      "slate-grey": { "role": "neutral", "displayName": "Slate Grey", "canonical": "#535A60", "tonalRamp": ["#1A1C1E", "#2A2E31", "#3B4044", "#4B5258", "#535A60", "#7C8389", "#A6ABB0", "#D2D5D8"] },
+      "card-white": { "role": "neutral", "displayName": "Card White", "canonical": "#FFFFFF", "tonalRamp": ["#9FA3A6", "#B6BABD", "#CDD0D2", "#E2E4E6", "#F1F3F4", "#F7F8F9", "#FBFCFC", "#FFFFFF"] },
+      "mist-grey": { "role": "neutral", "displayName": "Mist Grey", "canonical": "#F1F3F4", "tonalRamp": ["#3B3F42", "#54585B", "#6E7376", "#8A8F92", "#A8ACAF", "#C7CBCD", "#E1E4E5", "#F1F3F4"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only. One per page. text-wrap: balance, tight -0.01em tracking." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles in navy, often centered." },
+      "title": { "displayName": "Title", "purpose": "Profile names and card titles in navy." },
+      "body": { "displayName": "Body", "purpose": "Paragraph and list copy. Slate Grey on white, 65-75ch max." },
+      "label": { "displayName": "Label", "purpose": "Job titles, contact lines, button text. Sentence case, never all-caps." }
+    },
+    "shadows": [
+      { "name": "resting-card", "value": "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)", "purpose": "Service cards and content panels at rest (Tailwind shadow-md)." },
+      { "name": "lifted-panel", "value": "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)", "purpose": "Profile cards and the floating nav at rest (Tailwind shadow-lg)." },
+      { "name": "hover-lift", "value": "0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)", "purpose": "State every card rises to on hover (Tailwind shadow-xl)." },
+      { "name": "overlay-gate", "value": "0 8px 32px rgba(0,0,0,0.2)", "purpose": "Verify gate floating on the navy gradient." },
+      { "name": "modal", "value": "0 10px 40px rgba(0,0,0,0.3)", "purpose": "Error and verification modals above the dimmed backdrop." }
+    ],
+    "motion": [
+      { "name": "state-transition", "value": "200ms ease", "purpose": "Default for color, shadow, and transform state changes (hover/focus)." },
+      { "name": "modal-fade", "value": "300ms ease", "purpose": "Error-modal overlay opacity/visibility and scale-in (0.9 to 1)." }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (Action)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The save/contact call-to-action. Yellow fill, navy text, shifts to slate blue on hover.",
+      "html": "<a href=\"#\" class=\"ds-btn-primary\">Contact Danny</a>",
+      "css": ".ds-btn-primary { display: inline-block; background: #F0D04C; color: #103248; font-family: Montserrat, sans-serif; font-weight: 600; font-size: 1rem; padding: 12px 24px; border-radius: 8px; text-decoration: none; transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease; } .ds-btn-primary:hover { background: #385C8F; color: #FFFFFF; transform: scale(1.03); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px #F0D04C; }"
+    },
+    {
+      "name": "Secondary Button (Route)",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The 'go to this person' bio-route buttons. Slate blue fill, white text, lower priority than the yellow CTA.",
+      "html": "<a href=\"#\" class=\"ds-btn-secondary\">Danny's Biography</a>",
+      "css": ".ds-btn-secondary { display: inline-block; background: #385C8F; color: #FFFFFF; font-family: Montserrat, sans-serif; font-weight: 600; font-size: 1rem; padding: 16px 24px; border-radius: 8px; text-decoration: none; transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease; } .ds-btn-secondary:hover { background: #F0D04C; color: #103248; transform: scale(1.03); } .ds-btn-secondary:focus-visible { outline: none; box-shadow: 0 0 0 3px #F0D04C; }"
+    },
+    {
+      "name": "Verify Button (Gate)",
+      "kind": "button",
+      "refersTo": "button-verify",
+      "description": "Full-width navy submit button inside the verify gate. Disabled state drops opacity.",
+      "html": "<button class=\"ds-btn-verify\">Verify and Continue</button>",
+      "css": ".ds-btn-verify { width: 100%; background: #103248; color: #FFFFFF; font-family: Montserrat, sans-serif; font-weight: 600; font-size: 1.125rem; padding: 16px 32px; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s ease, opacity 0.2s ease; } .ds-btn-verify:hover:not(:disabled) { background: #385C8F; } .ds-btn-verify:disabled { opacity: 0.6; cursor: not-allowed; }"
+    },
+    {
+      "name": "Service Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "White content card with a colored icon chip, title, and copy. Rises on hover.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-chip\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z\"/></svg></div><h3 class=\"ds-card-title\">IT Strategy</h3><p class=\"ds-card-body\">Strategic technology planning and digital transformation roadmaps.</p></div>",
+      "css": ".ds-card { background: #FFFFFF; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); transition: box-shadow 0.2s ease; } .ds-card:hover { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); } .ds-card-chip { width: 48px; height: 48px; background: #F0D04C; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: #103248; } .ds-card-chip svg { width: 24px; height: 24px; } .ds-card-title { font-family: Montserrat, sans-serif; font-weight: 600; font-size: 1.25rem; color: #103248; margin: 0 0 8px; } .ds-card-body { font-family: Montserrat, sans-serif; font-weight: 400; font-size: 1rem; line-height: 1.6; color: #535A60; margin: 0; }"
+    },
+    {
+      "name": "Floating Navigation",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Detached navy nav bar inset from the top, with yellow wordmark and white links that hover to yellow.",
+      "html": "<nav class=\"ds-nav\"><a href=\"/\" class=\"ds-nav-brand\">Tam-Tham</a><div class=\"ds-nav-links\"><a href=\"#\" class=\"ds-nav-link ds-nav-link--active\">Danny</a><a href=\"#\" class=\"ds-nav-link\">Helen</a></div></nav>",
+      "css": ".ds-nav { display: flex; justify-content: space-between; align-items: center; background: rgba(16,50,72,0.95); backdrop-filter: blur(4px); border-radius: 8px; padding: 16px 24px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); } .ds-nav-brand { font-family: Montserrat, sans-serif; font-weight: 700; font-size: 1.25rem; color: #F0D04C; text-decoration: none; } .ds-nav-links { display: flex; gap: 32px; } .ds-nav-link { font-family: Montserrat, sans-serif; font-weight: 600; color: #FFFFFF; text-decoration: none; transition: color 0.2s ease; } .ds-nav-link:hover { color: #F0D04C; } .ds-nav-link--active { color: #F0D04C; border-bottom: 2px solid #F0D04C; padding-bottom: 4px; }"
+    },
+    {
+      "name": "Verify Gate",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "The contact flow's centerpiece: a white card on a navy gradient holding the Turnstile widget and verify button.",
+      "html": "<div class=\"ds-gate\"><h1 class=\"ds-gate-title\">Verify Access</h1><p class=\"ds-gate-copy\">Please complete the security check to proceed to the contact page.</p><div class=\"ds-gate-widget\">Turnstile widget</div><button class=\"ds-btn-verify\">Verify and Continue</button></div>",
+      "css": ".ds-gate { background: #FFFFFF; padding: 48px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); max-width: 480px; width: 100%; text-align: center; } .ds-gate-title { font-family: Montserrat, sans-serif; font-weight: 700; color: #103248; font-size: 2rem; margin: 0 0 16px; } .ds-gate-copy { font-family: Montserrat, sans-serif; color: #535A60; line-height: 1.6; margin: 0 0 32px; } .ds-gate-widget { min-height: 65px; display: flex; align-items: center; justify-content: center; color: #535A60; } .ds-btn-verify { width: 100%; background: #103248; color: #FFFFFF; font-family: Montserrat, sans-serif; font-weight: 600; font-size: 1.125rem; padding: 16px 32px; border: none; border-radius: 8px; cursor: pointer; margin-top: 24px; transition: background 0.2s ease; } .ds-btn-verify:hover { background: #385C8F; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Warm Handshake",
+    "overview": "This is the moment after a real introduction. Someone has just met Danny or Helen, tapped the NFC card, and is standing there with phone in hand, mid-conversation. The interface is the digital continuation of that handshake: Deep Harbour Navy carries the gravitas of established expertise, and Handshake Yellow is the warm gesture of greeting laid over it. The system is confident but welcoming. The personality is warm, credible, and human; navy and white do the steady, trustworthy work while yellow and a calm coastal teal carry the warmth. Density is generous and unhurried, single ideas per fold, thumb-reachable actions. Depth is soft and lifted: surfaces rest on a gentle shadow and rise to meet a hover.",
+    "keyCharacteristics": [
+      "Navy-grounded with a single warm gold gesture — credibility plus warmth",
+      "Mobile-moment first: one-handed, post-introduction, variable lighting",
+      "Soft, lifted depth — friendly and tactile, never flat-and-cold or harsh",
+      "Montserrat throughout, carried by weight contrast (700 / 600 / 400)",
+      "Routing between two people is the central design problem, not an afterthought"
+    ],
+    "rules": [
+      { "name": "The One Warm Voice Rule", "body": "Handshake Yellow appears on no more than one decisive element per fold — the primary action. Its rarity is what makes the handshake feel personal rather than promotional. If two yellows compete on a screen, one of them is wrong.", "section": "colors" },
+      { "name": "The Yellow-On-Navy Rule", "body": "Handshake Yellow and Coastal Teal are forbidden as small text or icons on white or Mist Grey. They live on navy, or they are large, or they are a fill behind dark text. No exceptions.", "section": "colors" },
+      { "name": "The Weight-Is-Hierarchy Rule", "body": "Differentiation comes from weight and size, never from a second font and never from all-caps body. If a heading needs more presence, it gets heavier or larger, not a new typeface.", "section": "typography" },
+      { "name": "The Rise-To-Meet Rule", "body": "Cards rest on shadow-md/shadow-lg and rise to shadow-xl on hover with a 200ms transition. The lift always animates shadow (and optionally a small translateY), never layout. The card meets the cursor; it never jumps.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do anchor every screen in Deep Harbour Navy (#103248) and reserve Handshake Yellow (#F0D04C) for the single primary action per fold.",
+      "Do keep Slate Grey (#535A60) body text on white or Mist Grey, where it clears WCAG AA (~6.9:1).",
+      "Do rest cards on a soft shadow and rise to shadow-xl on hover over 200ms.",
+      "Do carry hierarchy with Montserrat weight (700 / 600 / 400) and size, never a second typeface.",
+      "Do treat the Danny-Helen routing as a designed moment, with real warmth in the copy and layout.",
+      "Do define the Mist Grey (#F1F3F4) token for section bands; replace the undefined bg-light-grey utility that currently renders as nothing."
+    ],
+    "donts": [
+      "Don't place Handshake Yellow or Coastal Teal as small text or icons on white or Mist Grey — they fail contrast (~2:1).",
+      "Don't put Slate Grey text on the navy footer or any navy surface (~2:1, fails AA). Use white or Coastal Teal on navy.",
+      "Don't build a generic SaaS landing — no gradient hero + feature grid + big-number metric. This is two people, not a product.",
+      "Don't let the page become a Linktree link-dump — a bare stack of routing buttons with no point of view.",
+      "Don't add flashy or heavy animation — motion is quiet, purposeful, and always has a prefers-reduced-motion fallback.",
+      "Don't ship dated 2010s brochureware — stacked stock-photo sections and hard drop-shadows.",
+      "Don't repeat the identical icon-chip + heading + paragraph service card as the answer to every section.",
+      "Don't use all-caps body copy or a tracked uppercase eyebrow above every section."
+    ]
+  }
+}

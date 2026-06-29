@@ -98,7 +98,6 @@
         /* Search area */
         .search-container {
             padding: 16px 24px;
-            border-bottom: 1px solid var(--border);
         }
 
         .search-box {
@@ -117,6 +116,83 @@
             border-color: var(--accent);
             background-color: rgba(255,255,255,0.08);
             box-shadow: 0 0 0 2px rgba(255, 191, 0, 0.2);
+        }
+
+        /* Filter Chips */
+        .filter-container {
+            display: flex;
+            gap: 8px;
+            padding: 0 24px 16px 24px;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border);
+            scrollbar-width: none; /* Firefox */
+        }
+        .filter-container::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        .filter-chip {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 16px;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        .filter-chip:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .filter-chip.active {
+            background: rgba(166, 25, 46, 0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Sidebar Collapse (Desktop) */
+        @media (min-width: 769px) {
+            #sidebar {
+                transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+            #sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+            #desktop-collapse-toggle {
+                position: absolute;
+                top: 24px;
+                right: -40px;
+                width: 40px;
+                height: 40px;
+                background: var(--bg-sidebar);
+                border: 1px solid var(--border);
+                border-left: none;
+                border-radius: 0 8px 8px 0;
+                color: var(--text-main);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+                transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+            #sidebar.collapsed #desktop-collapse-toggle {
+                transform: translateX(0); /* stays relative to sidebar */
+            }
+            #desktop-collapse-toggle svg {
+                transition: transform 0.3s ease;
+            }
+            #sidebar.collapsed #desktop-collapse-toggle svg {
+                transform: rotate(180deg);
+            }
+        }
+        @media (max-width: 768px) {
+            #desktop-collapse-toggle {
+                display: none;
+            }
         }
 
         /* Item List container */
@@ -144,7 +220,12 @@
             background: rgba(255, 255, 255, 0.25);
         }
 
-        /* Food Card */
+        /* Micro-animations for Cards */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .food-card {
             background-color: rgba(22, 22, 22, 0.95);
             border: 1px solid var(--border);
@@ -156,6 +237,8 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
         }
 
         .food-card:hover {
@@ -536,6 +619,9 @@
 
     <!-- Sidebar -->
     <div id="sidebar">
+        <button id="desktop-collapse-toggle" aria-label="Toggle Sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
         <div class="sidebar-header">
             <h1>CS <span>2026</span></h1>
             <p>Midway Culinary Map</p>
@@ -544,6 +630,13 @@
         
         <div class="search-container">
             <input type="text" class="search-box" id="search" aria-label="Search food items or booths" placeholder="Search food items or booths...">
+        </div>
+        
+        <div class="filter-container" id="filter-chips">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="Savoury">Savoury</button>
+            <button class="filter-chip" data-filter="Sweet">Sweet</button>
+            <button class="filter-chip" data-filter="Drink">Drinks</button>
         </div>
         
         <div class="item-list" id="list">
@@ -587,7 +680,8 @@
                 "vendor": "Melt Town Grilled Cheese",
                 "description": "Sweet, spicy, cheesy chaos. This Buldak-stuffed grilled cheese brings the heat with every bite. Loaded with saucy, spice-packed noodles and wrapped in crispy, golden bread. When the heat kicks in, the gooey cheese cools things down-before the spice builds again.",
                 "coords": {"lat": 51.0358827, "lng": -114.0575063},
-                "image": "images/buldak_stuffed_grilled_cheese.png"
+                "image": "images/buldak_stuffed_grilled_cheese.png",
+                "tags": ["Savoury"]
             },
             {
                 "id": 2,
@@ -596,7 +690,8 @@
                 "vendor": "Covet Sips + Sweets",
                 "description": "The viral matcha moment your camera roll needs. This dreamy dessert sip layers earthy matcha beneath a fluffy blue coconut cream cloud for a candy-sweet, creamy treat that's as iconic as it is delicious.",
                 "coords": {"lat": 51.0386616, "lng": -114.0566612},
-                "image": "images/blue_coconut_cloud_matcha.jpg"
+                "image": "images/blue_coconut_cloud_matcha.jpg",
+                "tags": ["Sweet", "Drink"]
             },
             {
                 "id": 3,
@@ -605,7 +700,8 @@
                 "vendor": "The Poutine King",
                 "description": "Go big or go Dutch! A towering 5 lb cone of golden fresh-cut fries, loaded with shredded Gruyère cheese, topped with silky béchamel sauce, and finished with a luxurious truffle mayo drizzle. A towering, shareable showstopper.",
                 "coords": {"lat": 51.036940, "lng": -114.055500},
-                "image": "images/amsterdam_cone_fries.jpg"
+                "image": "images/amsterdam_cone_fries.jpg",
+                "tags": ["Savoury"]
             },
             {
                 "id": 4,
@@ -614,7 +710,8 @@
                 "vendor": "Pizza 73",
                 "description": "A gooey cheese slice dipped in corn dog batter, dusted with Cheetos seasoning and deep-fried to golden perfection. Choose from classic, creamy garlic and pickle, or creamy garlic and pepperoni.",
                 "coords": {"lat": 51.036875, "lng": -114.054700},
-                "image": "images/the_cheesy_saddle_slice.jpg"
+                "image": "images/the_cheesy_saddle_slice.jpg",
+                "tags": ["Savoury"]
             },
             {
                 "id": 5,
@@ -623,7 +720,8 @@
                 "vendor": "Drink a Fruit",
                 "description": "Say hello to deep-fried street corn. Slow-roasted at 500 degrees by our specially trained \"corn ninjas,\" husked hot, battered immediately and fried to golden perfection. Take your pick: buttered hot or Mexican-style.",
                 "coords": {"lat": 51.0368470, "lng": -114.0562874},
-                "image": "images/deep_fried_street_corn.png"
+                "image": "images/deep_fried_street_corn.png",
+                "tags": ["Savoury"]
             },
             {
                 "id": 6,
@@ -632,7 +730,8 @@
                 "vendor": "Covet Sips + Sweets",
                 "description": "The childhood snack that raised us-now in your iced latte era. This creamy, dessert-inspired sip is topped with a Dunkaroo-flavoured soft cloud, bringing sweet frosting and sprinkle nostalgia to the ultimate treat for the iced coffee crowd.",
                 "coords": {"lat": 51.0386616, "lng": -114.0566612},
-                "image": "images/dunkaroo_iced_latte.jpg"
+                "image": "images/dunkaroo_iced_latte.jpg",
+                "tags": ["Sweet", "Drink"]
             },
             {
                 "id": 7,
@@ -641,7 +740,8 @@
                 "vendor": "Twisted Pickles",
                 "description": "Move over ordinary snacks, the Garlic Parm Twisted Pickle just rolled onto the midway and its crushing cravings. This twisted pickle gets battered and fried to golden perfection, then bulldozed with creamy garlic aioli and buried under a blizzard of parmesan.",
                 "coords": {"lat": 51.0371391, "lng": -114.0540141},
-                "image": "images/garlic_parm_twisted_pickle.jpg"
+                "image": "images/garlic_parm_twisted_pickle.jpg",
+                "tags": ["Savoury"]
             },
             {
                 "id": 8,
@@ -650,7 +750,8 @@
                 "vendor": "Drink a Fruit",
                 "description": "Who wants to talk about what's big in Japan? The original maki sushi corn dog is no joke. Handmade sushi rice, pressed into seaweed and rolled around a jumbo chicken, beef or veggie dog, coated in panko and fried to golden perfection. Loaded with everything at the sushi table.",
                 "coords": {"lat": 51.034540, "lng": -114.056380},
-                "image": "images/maki_sushi_corn_dog.png"
+                "image": "images/maki_sushi_corn_dog.png",
+                "tags": ["Savoury"]
             },
             {
                 "id": 9,
@@ -659,7 +760,8 @@
                 "vendor": "Freakk Fries",
                 "description": "The spiral that sizzles! Get ready to twist your taste buds with our Potato Sago Spirals. Crafted from a perfect blend of creamy mashed potatoes and delicate sago, pressed into golden circles and deep-fried to a flawless snap.",
                 "coords": {"lat": 51.0368480, "lng": -114.056150},
-                "image": "images/potato_sago_spiral_-_with_loaded_tex-mex_edition.jpg"
+                "image": "images/potato_sago_spiral_-_with_loaded_tex-mex_edition.jpg",
+                "tags": ["Savoury"]
             },
             {
                 "id": 10,
@@ -668,7 +770,8 @@
                 "vendor": "Wok This Way",
                 "description": "Nothing says \"yeehaw\" like these 'ramenuts.' This next-level street food fusion features a ramen donut with a deep golden crust of noodles and a cheesy centre-sweet, savoury and crunchy. Topped with our in-house sauces.",
                 "coords": {"lat": 51.0369718, "lng": -114.0554023},
-                "image": "images/ramen_donut.png"
+                "image": "images/ramen_donut.png",
+                "tags": ["Sweet", "Savoury"]
             }
         ];
 
@@ -722,10 +825,12 @@
                 return;
             }
 
-            itemsToRender.forEach((item) => {
+            itemsToRender.forEach((item, index) => {
                 // 1. Create card
                 const card = document.createElement('div');
-                card.className = `food-card ${activeCardId === item.id ? 'active' : ''}`;
+                card.className = 'food-card';
+                card.style.animationDelay = `${index * 0.05}s`;
+                if (item.id === activeCardId) card.classList.add('active');
                 card.setAttribute('data-id', item.id);
                 card.innerHTML = `
                     <div class="card-img-container">
@@ -778,23 +883,18 @@
             });
         }
 
-        // Handle item selection
         function selectItem(id, zoomTo) {
-            // Update active state in UI
             if (activeCardId) {
                 const prevActive = document.querySelector(`.food-card[data-id="${activeCardId}"]`);
                 if (prevActive) prevActive.classList.remove('active');
-                
                 const prevMarker = document.getElementById(`marker-wrapper-${activeCardId}`);
                 if (prevMarker) prevMarker.classList.remove('active');
             }
 
             activeCardId = id;
-            
             const newActive = document.querySelector(`.food-card[data-id="${id}"]`);
             if (newActive) {
                 newActive.classList.add('active');
-                // Scroll card into view inside sidebar
                 newActive.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
 
@@ -802,7 +902,6 @@
             if (newMarker) newMarker.classList.add('active');
 
             const item = foodItems.find(f => f.id === id);
-            
             if (zoomTo && item) {
                 map.setView([item.coords.lat, item.coords.lng], 18, { animate: true });
                 markers[id].openPopup();
@@ -814,21 +913,46 @@
             }
         }
 
-        // Search logic
         const searchInput = document.getElementById('search');
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const filtered = foodItems.filter(item => 
-                item.title.toLowerCase().includes(query) ||
-                item.vendor.toLowerCase().includes(query) ||
-                item.booth.toLowerCase().includes(query) ||
-                item.description.toLowerCase().includes(query)
-            );
+        let activeFilter = 'all';
+
+        function updateList() {
+            const query = searchInput.value.toLowerCase();
+            const filtered = foodItems.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(query) ||
+                                      item.vendor.toLowerCase().includes(query) ||
+                                      item.booth.toLowerCase().includes(query) ||
+                                      item.description.toLowerCase().includes(query);
+                const matchesFilter = activeFilter === 'all' || (item.tags && item.tags.includes(activeFilter));
+                return matchesSearch && matchesFilter;
+            });
             renderItems(filtered);
+        }
+
+        searchInput.addEventListener('input', updateList);
+
+        const filterChips = document.querySelectorAll('.filter-chip');
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                filterChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                activeFilter = chip.getAttribute('data-filter');
+                updateList();
+            });
         });
 
+        // Desktop collapse logic
+        const desktopToggle = document.getElementById('desktop-collapse-toggle');
+        if (desktopToggle) {
+            desktopToggle.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+                // Give CSS transition time to run, then invalidate map size
+                setTimeout(() => map.invalidateSize(), 300);
+            });
+        }
+
         // Initialize Render
-        renderItems(foodItems);
+        updateList();
 
         // Geolocation / GPS Live Tracking System
         let userMarker = null;

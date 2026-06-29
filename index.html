@@ -155,10 +155,10 @@
         /* Sidebar Collapse (Desktop) */
         @media (min-width: 769px) {
             #sidebar {
-                transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             }
             #sidebar.collapsed {
-                transform: translateX(-100%);
+                margin-left: -420px;
             }
             #desktop-collapse-toggle {
                 position: absolute;
@@ -177,10 +177,6 @@
                 cursor: pointer;
                 box-shadow: 5px 0 15px rgba(0,0,0,0.3);
                 z-index: 1000;
-                transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            }
-            #sidebar.collapsed #desktop-collapse-toggle {
-                transform: translateX(0); /* stays relative to sidebar */
             }
             #desktop-collapse-toggle svg {
                 transition: transform 0.3s ease;

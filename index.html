@@ -833,9 +833,8 @@
                         <img class="card-img" src="${item.image}" alt="${item.title}" loading="lazy">
                     </div>
                     <div class="card-content">
-                        <span class="card-booth">Map #${item.id}</span>
+                        <span class="card-booth">#${item.id} &bull; ${item.vendor}</span>
                         <h2 class="card-title">${item.title}</h2>
-                        <p class="card-vendor">${item.vendor}</p>
                     </div>
                 `;
 
@@ -858,7 +857,7 @@
 
                 const popupHTML = `
                     <div class="popup-header">
-                        <span>Map #${item.id} &bull; ${item.vendor}</span>
+                        <span>#${item.id} &bull; ${item.vendor}</span>
                         <h2>${item.title}</h2>
                     </div>
                     <div class="popup-body">

@@ -543,7 +543,7 @@
         </div>
         
         <div class="search-container">
-            <input type="text" class="search-box" id="search" placeholder="Search food items or booths...">
+            <input type="text" class="search-box" id="search" aria-label="Search food items or booths" placeholder="Search food items or booths...">
         </div>
         
         <div class="item-list" id="list">
@@ -717,6 +717,11 @@
                 map.removeLayer(markers[id]);
             }
 
+            if (itemsToRender.length === 0) {
+                listContainer.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-muted);">No food items found matching your search.</div>';
+                return;
+            }
+
             itemsToRender.forEach((item) => {
                 // 1. Create card
                 const card = document.createElement('div');
@@ -724,7 +729,7 @@
                 card.setAttribute('data-id', item.id);
                 card.innerHTML = `
                     <div class="card-img-container">
-                        <img class="card-img" src="${item.image}" alt="${item.title}">
+                        <img class="card-img" src="${item.image}" alt="${item.title}" loading="lazy">
                     </div>
                     <div class="card-content">
                         <span class="card-booth">${item.booth}</span>
@@ -756,7 +761,7 @@
                         <h2>${item.title}</h2>
                     </div>
                     <div class="popup-body">
-                        <img class="popup-img" src="${item.image}" alt="${item.title}">
+                        <img class="popup-img" src="${item.image}" alt="${item.title}" loading="lazy">
                         <p class="popup-desc">${item.description}</p>
                     </div>
                 `;
